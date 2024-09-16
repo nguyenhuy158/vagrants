@@ -1,0 +1,78 @@
+- hosts: webservers
+  tasks:
+    - name: Print message 1
+      debug:
+        msg: Hello world!
+
+    - name: Ping hosts
+      ansible.builtin.ping:
+
+# - hosts: localhost
+#   become: yes
+#   tasks:
+#     - name: Print message 2
+#       debug:
+#         msg: Hello world!
+
+- hosts: localhost
+  tasks:
+    - name: Print message 3
+      become: yes
+      debug:
+        msg: Hello world!
+
+    - name: Print message 4
+      become: yes
+      become_user: huy
+      debug:
+        msg: Hello world!
+
+    - name: Install a package (state=present is optional)
+      apt:
+        name: docker
+        state: present
+
+    - name: Remove a package
+      apt:
+        name: docker-compose
+        state: absent
+
+    - name: Install a list of packages
+      apt:
+        pkg:
+          - docker
+          - docker-compose
+
+    - name: Upgrade all packages to the latest version
+      apt:
+        name: "*"
+        state: latest
+
+    - name: Update all packages to the latest version
+      apt:
+        upgrade: dist
+
+    - name: Run the equivalent of "apt-get update"
+      apt:
+        update_cache: yes
+
+    # - name: Install a .deb package
+    #   apt:
+    #     deb: <deb-filepath>
+
+    # - name: Install the build dependencies for a package
+    #   apt:
+    #     pkg: <package-name>
+    #     state: build-dep
+
+    # - name: Install a .deb package from the internet
+    #   apt:
+    #     deb: <deb-url>
+
+    - name: Remove useless packages from the cache
+      apt:
+        autoclean: yes
+
+    - name: Remove dependencies that are no longer required
+      apt:
+        autoremove: yes
